@@ -5,10 +5,18 @@ export const learn = () => {
   const [user, setUser] = useState([]);
 
   const { id } = "useParams";
+  const _id = useLocation().pathname.split("/")[2];
   let axios = {
     get: "get",
     patch: "",
     delete: "de",
+    cancleToken: {
+      source: {
+        cancel: "",
+        open: "opeen",
+        uncancle: () => console.log("i am cancelled"),
+      },
+    },
   };
   useEffect(() => {
     const subscibed = false;
@@ -31,16 +39,37 @@ export const learn = () => {
         ? console.log("cancelled")
         : new Error("there is an error please help")
     );
-
-    useEffect(() => {
-      axios.get("data").then((data) => setUser(data));
-    }, []);
-
     return () => {
       console.log("cancelled");
       controller.abort();
     };
   });
+
+  useEffect(() => {
+    // using axios cancle token
+    let axiosCancelToken = axios.cancleToken.source || source();
+    axios
+      .get(`data${_id}`, { axiosCancelToken: axiosCancelToken.token })
+      .then((data) => setUser(data))
+      .catch((err) => {
+        axios.isCancel(err) ? console.log("cancelled") : ""; //todo handle error
+      });
+
+    return () => {
+      axiosCancelToken.cancel();
+    };
+  }, []);
+
+  // using the clear interval method
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // state logic
+    });
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <>
       <h1>hello world</h1>
