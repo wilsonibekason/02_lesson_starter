@@ -4,6 +4,7 @@ import React from "react";
 import { selectAllPosts } from "./postSlice";
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
+import ReactionButton from "./ReactionButton";
 const PostsList = () => {
   const posts = useSelector(selectAllPosts);
   // reverse postion of all post when created
@@ -19,6 +20,7 @@ const PostsList = () => {
         <PostAuthor userId={post.user} />
         <TimeAgo timestamp={post.date} />
       </p>
+      <ReactionButton post={post} />
     </article>
   ));
   return (
