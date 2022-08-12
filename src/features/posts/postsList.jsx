@@ -1,12 +1,32 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import React from "react";
-import { selectAllPosts } from "./postSlice";
+import {
+  selectAllPosts,
+  getPostError,
+  getPostStatus,
+  fetchPosts,
+} from "./postSlice";
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
 import ReactionButton from "./ReactionButton";
+import { useEffect } from "react";
 const PostsList = () => {
+  const dispatch = useDispatch();
+
   const posts = useSelector(selectAllPosts);
+  const postsStatus = useSelector(getPostStatus);
+  const postsError = useSelector(getPostError);
+
+  useEffect(() => {
+    let isCancelled = false;
+    postsStatus === "idle" && !isCancelled && dispatch(fetchPosts());
+    // clean up function
+    return () => {
+      console.log("cancelled");
+      isCancelled = true;
+    };
+  }, [postsStatus, dispatch]);
   // reverse postion of all post when created
   const orderedPosts = posts
     .slice()
