@@ -101,5 +101,7 @@ const postsSlice = createSlice({
 });
 // produce a reducer and a prepare callback for our postAdded reducer function
 export const selectAllPosts = (state) => state.posts.posts;
+export const getPostStatus = (state) => state.posts.status;
+export const getPostError = (state) => state.posts.error;
 export const { postAdded, reactionsAdded } = postsSlice.actions;
 export default postsSlice.reducer;
