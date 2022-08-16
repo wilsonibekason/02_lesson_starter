@@ -7,10 +7,11 @@ import {
   getPostStatus,
   fetchPosts,
 } from "./postSlice";
-import PostAuthor from "./PostAuthor";
-import TimeAgo from "./TimeAgo";
-import ReactionButton from "./ReactionButton";
+// import PostAuthor from "./PostAuthor";
+// import TimeAgo from "./TimeAgo";
+// import ReactionButton from "./ReactionButton";
 import { useEffect } from "react";
+import PostsExercept from "./PostsExercept";
 const PostsList = () => {
   const dispatch = useDispatch();
 
@@ -28,26 +29,32 @@ const PostsList = () => {
     };
   }, [postsStatus, dispatch]);
   // reverse postion of all post when created
-  const orderedPosts = posts
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date));
-  //?.subString(0, 100)
-  const renderPosts = orderedPosts.map((post) => (
-    <article key={post.id}>
-      <h3>{post.title}</h3>
-      <p>{post.content}</p>
-      <p className="postCredit">
-        <PostAuthor userId={post.user} />
-        <TimeAgo timestamp={post.date} />
-      </p>
-      <ReactionButton post={post} />
-    </article>
-  ));
+  // const orderedPosts = posts
+  //   .slice()
+  //   .sort((a, b) => b.date.localeCompare(a.date));
+  // //?.subString(0, 100)
+  // const renderPosts = orderedPosts.map((post) => (
+  //   <PostsExercept key={post.id} />
+  // ));
+
+  let content;
+  if (postsStatus === "loading") {
+    content = <p>"loading ..."</p>;
+  } else if (postsStatus === "success") {
+    const orderedPosts = posts
+      .slice()
+      .sort((a, b) => b.date.localeCompare(a.date));
+    content = orderedPosts.map((post) => (
+      <PostsExercept post={post} key={post.id} />
+    ));
+  } else if (postsStatus === "failed") {
+    content = <p>"error"</p>;
+  }
   return (
     <>
       <section>
         <h1>posts</h1>
-        {renderPosts}
+        {content}
       </section>
     </>
   );
