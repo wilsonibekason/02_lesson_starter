@@ -24,7 +24,7 @@ const usereducer = () => {
 <div>
     <button onClick={handleFetch}>{state.loading ? "loading ... " : "fetch the post "}</button>
     <p>{state.post?.title}</p>
-    <span>{state.error && "something went wrong"the}</span>
+    <span>{state.error && "something went wrong"}</span>
 </div>
 </>
     )
