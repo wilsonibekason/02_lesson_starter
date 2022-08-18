@@ -93,3 +93,54 @@ export type WelcomeEvent = {
   type: "reconnect";
   reason: string;
 };
+
+export interface ListenOptions {
+  includeResult?: boolean;
+  includePreviousRevision?: boolean;
+  visibility?: "sync" | "async" | "query";
+  events?: ListenEventName[];
+  effectFormat?: "mendoza";
+  tag?: string;
+}
+
+export interface SanityImageAssetDocument extends SanityAssetDocument {
+  metadata: {
+    _type: "sanity.imageMetadata";
+    hasAlpha: boolean;
+    isOpaque: boolean;
+    lqip?: string;
+    blurHash?: string;
+    dimensions: {
+      _type: "sanity.imageDimensions";
+      aspectRatio: number;
+      height: number;
+      width: number;
+    };
+    palette?: {
+      _type: "sanity.imagePalette";
+      darkMuted?: SanityImagePalette;
+      darkVibrant?: SanityImagePalette;
+      dominant?: SanityImagePalette;
+      lightMuted?: SanityImagePalette;
+      lightVibrant?: SanityImagePalette;
+      muted?: SanityImagePalette;
+      vibrant?: SanityImagePalette;
+    };
+    image?: {
+      _type: "sanity.imageExifTags";
+      [key: string]: any;
+    };
+    exif?: {
+      _type: "sanity.imageExifMetadata";
+      [key: string]: any;
+    };
+  };
+}
+
+export type SanityDocumentStub<
+  T extends Record<string, any> = Record<string, any>
+> = {
+  [P in keyof T]: T[P];
+} & {
+  _type: string;
+};
